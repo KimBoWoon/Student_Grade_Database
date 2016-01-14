@@ -1,0 +1,30 @@
+﻿빌드 시작: 2016-01-14 오후 1:06:02
+     1>2 노드의 "C:\Users\BoWoon\Documents\GitHub\Student_Grade_Database\StudentGradeDatabase\Student_Grade_Database\Student_Grade_Database.vcxproj" 프로젝트(Build 대상)입니다.
+     1>ClCompile:
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /sdl /Od /Oy- /D WIN32 /D _DEBUG /D _CONSOLE /D _LIB /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TC /analyze- /errorReport:prompt Student_Grade_Database.c
+         Student_Grade_Database.c
+     1>c:\users\bowoon\documents\github\student_grade_database\studentgradedatabase\student_grade_database\student_grade_database.c(132): warning C4133: '함수' : 'TCHAR [20]'과(와) 'const char *' 사이의 형식이 호환되지 않습니다.
+     1>c:\users\bowoon\documents\github\student_grade_database\studentgradedatabase\student_grade_database\student_grade_database.c(172): warning C4133: '함수' : 'TCHAR [20]'과(와) 'const char *' 사이의 형식이 호환되지 않습니다.
+     1>c:\users\bowoon\documents\github\student_grade_database\studentgradedatabase\student_grade_database\student_grade_database.c(197): warning C4133: '함수' : 'TCHAR [20]'과(와) 'const char *' 사이의 형식이 호환되지 않습니다.
+     1>c:\users\bowoon\documents\github\student_grade_database\studentgradedatabase\student_grade_database\student_grade_database.c(203): warning C4133: '함수' : 'Node *'과(와) 'StudentNode *' 사이의 형식이 호환되지 않습니다.
+     1>c:\users\bowoon\documents\github\student_grade_database\studentgradedatabase\student_grade_database\student_grade_database.c(272): warning C4133: '함수' : 'TCHAR [20]'과(와) 'const char *' 사이의 형식이 호환되지 않습니다.
+     1>c:\users\bowoon\documents\github\student_grade_database\studentgradedatabase\student_grade_database\student_grade_database.c(273): warning C4133: '함수' : 'Node *'과(와) 'StudentNode *' 사이의 형식이 호환되지 않습니다.
+     1>c:\users\bowoon\documents\github\student_grade_database\studentgradedatabase\student_grade_database\student_grade_database.c(292): warning C4133: '함수' : 'Node *'과(와) 'StudentNode *' 사이의 형식이 호환되지 않습니다.
+     1>c:\users\bowoon\documents\github\student_grade_database\studentgradedatabase\student_grade_database\student_grade_database.c(311): warning C4133: '함수' : 'Node *'과(와) 'StudentNode *' 사이의 형식이 호환되지 않습니다.
+     1>c:\users\bowoon\documents\github\student_grade_database\studentgradedatabase\student_grade_database\student_grade_database.c(319): warning C4028: 정식 매개 변수 1이(가) 선언과 다릅니다.
+     1>c:\users\bowoon\documents\github\student_grade_database\studentgradedatabase\student_grade_database\student_grade_database.c(319): warning C4028: 정식 매개 변수 2이(가) 선언과 다릅니다.
+     1>c:\users\bowoon\documents\github\student_grade_database\studentgradedatabase\student_grade_database\student_grade_database.c(322): warning C4133: '함수' : 'TCHAR [20]'과(와) 'char *' 사이의 형식이 호환되지 않습니다.
+     1>c:\users\bowoon\documents\github\student_grade_database\studentgradedatabase\student_grade_database\student_grade_database.c(322): warning C4133: '함수' : 'TCHAR [20]'과(와) 'const char *' 사이의 형식이 호환되지 않습니다.
+     1>c:\users\bowoon\documents\github\student_grade_database\studentgradedatabase\student_grade_database\student_grade_database.c(323): warning C4133: '함수' : 'TCHAR [20]'과(와) 'char *' 사이의 형식이 호환되지 않습니다.
+     1>c:\users\bowoon\documents\github\student_grade_database\studentgradedatabase\student_grade_database\student_grade_database.c(323): warning C4133: '함수' : 'TCHAR [20]'과(와) 'const char *' 사이의 형식이 호환되지 않습니다.
+     1>c:\users\bowoon\documents\github\student_grade_database\studentgradedatabase\student_grade_database\student_grade_database.c(324): warning C4133: '함수' : 'TCHAR [20]'과(와) 'char *' 사이의 형식이 호환되지 않습니다.
+     1>c:\users\bowoon\documents\github\student_grade_database\studentgradedatabase\student_grade_database\student_grade_database.c(324): warning C4133: '함수' : 'TCHAR [20]'과(와) 'const char *' 사이의 형식이 호환되지 않습니다.
+     1>c:\users\bowoon\documents\github\student_grade_database\studentgradedatabase\student_grade_database\student_grade_database.c(335): warning C4028: 정식 매개 변수 1이(가) 선언과 다릅니다.
+       Link:
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\BoWoon\Documents\GitHub\Student_Grade_Database\StudentGradeDatabase\Debug\Student_Grade_Database.exe" /INCREMENTAL /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:\Users\BoWoon\Documents\GitHub\Student_Grade_Database\StudentGradeDatabase\Debug\Student_Grade_Database.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\Users\BoWoon\Documents\GitHub\Student_Grade_Database\StudentGradeDatabase\Debug\Student_Grade_Database.lib" /MACHINE:X86 Debug\Student_Grade_Database.obj
+         Student_Grade_Database.vcxproj -> C:\Users\BoWoon\Documents\GitHub\Student_Grade_Database\StudentGradeDatabase\Debug\Student_Grade_Database.exe
+     1>"C:\Users\BoWoon\Documents\GitHub\Student_Grade_Database\StudentGradeDatabase\Student_Grade_Database\Student_Grade_Database.vcxproj" 프로젝트를 빌드했습니다(Build 대상).
+
+빌드했습니다.
+
+경과 시간: 00:00:06.16
