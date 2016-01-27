@@ -7,18 +7,18 @@ int main()
 void MenuView()
 {
 	printf("********************************\n");
-	printf("ÇÐ»ý µ¥ÀÌÅÍ º£ÀÌ½º °ü¸® ÇÁ·Î±×·¥\n");
-	printf("                 20113259 ±èº¸¿î\n");
+	printf("ï¿½Ð»ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ì½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Î±×·ï¿½\n");
+	printf("                 20113259 ï¿½èº¸ï¿½ï¿½\n");
 	printf("********************************\n");
-	printf("----------¸Þ´º----------\n");
-	printf("        1. ÀÔ·Â\n");
-	printf("        2. º¯°æ\n");
-	printf("        3. »èÁ¦\n");
-	printf("        4. Ãâ·Â\n");
-	printf("        5. ÆÄÀÏ Ãâ·Â\n");
-	printf("        6. ÇÁ·Î±×·¥ Á¾·á\n");
+	printf("----------ï¿½Þ´ï¿½----------\n");
+	printf("        1. ï¿½Ô·ï¿½\n");
+	printf("        2. ï¿½ï¿½ï¿½ï¿½\n");
+	printf("        3. ï¿½ï¿½ï¿½ï¿½\n");
+	printf("        4. ï¿½ï¿½ï¿½\n");
+	printf("        5. ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½\n");
+	printf("        6. ï¿½ï¿½ï¿½Î±×·ï¿½ ï¿½ï¿½ï¿½ï¿½\n");
 	printf("------------------------\n");
-	printf("¾î¶² ÀÛ¾÷À» ÇÏ½Ã°Ú½À´Ï±î? ");
+	printf("ï¿½î¶² ï¿½Û¾ï¿½ï¿½ï¿½ ï¿½Ï½Ã°Ú½ï¿½ï¿½Ï±ï¿½? ");
 }
 void Manager()
 {
@@ -30,11 +30,11 @@ void Manager()
 	n.Tail = NULL;
 	//n.Next = NULL;
 
-	fopen_s(&file, "student.db", "a+");
+	file = fopen("student.db", "a+");
 
 	if (file == NULL)
 	{
-		printf("ÆÄÀÏ °³¹æ ½ÇÆÐ\n");
+		printf("ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½\n");
 		exit(1);
 	}
 	else
@@ -43,7 +43,7 @@ void Manager()
 	while (1)
 	{
 		MenuView();
-		Menu = _getch();
+		scanf("%c", &Menu);
 		printf("\n");
 
 		switch (Menu)
@@ -64,11 +64,11 @@ void Manager()
 			StudentFilePrint(file, &n);
 			break;
 		case '6':
-			printf("ÇÁ·Î±×·¥À» Á¾·áÇÕ´Ï´Ù...\n");
+			printf("ï¿½ï¿½ï¿½Î±×·ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Õ´Ï´ï¿½...\n");
 			fclose(file);
 			exit(0);
 		default:
-			printf("Àß¸øµÈ ÀÔ·ÂÀÔ´Ï´Ù!\n");
+			printf("ï¿½ß¸ï¿½ï¿½ï¿½ ï¿½Ô·ï¿½ï¿½Ô´Ï´ï¿½!\n");
 			break;
 		}
 		system("pause");
@@ -84,9 +84,9 @@ void FileInput(FILE* file, StudentNode* n)
 		Node* NewNode = (Node *)malloc(sizeof(Node));
 		NewNode->Next = NULL;
 
-		if (fscanf_s(file, "%s", NewNode->name, sizeof(NewNode->name)) == 1)
+		if (fscanf(file, "%s", NewNode->name) == 1)
 		{
-			fscanf_s(file, "%d %lf", &NewNode->id, &NewNode->score);
+			fscanf(file, "%d %lf", &NewNode->id, &NewNode->score);
 
 			if (n->Head == NULL)
 				n->Head = NewNode;
@@ -102,12 +102,12 @@ void StudentInput(StudentNode* n)
 	Node* NewNode = (Node *)malloc(sizeof(Node));
 	NewNode->Next = NULL;
 
-	printf("ÀÌ¸§ : ");
-	scanf_s("%s", NewNode->name, sizeof(NewNode->name));
-	printf("ÇÐ¹ø : ");
-	scanf_s("%d", &NewNode->id);
-	printf("Á¡¼ö : ");
-	scanf_s("%lf", &NewNode->score);
+	printf("ï¿½Ì¸ï¿½ : ");
+	scanf("%s", NewNode->name);
+	printf("ï¿½Ð¹ï¿½ : ");
+	scanf("%d", &NewNode->id);
+	printf("ï¿½ï¿½ï¿½ï¿½ : ");
+	scanf("%lf", &NewNode->score);
 
 	if (n->Head == NULL)
 		n->Head = NewNode;
@@ -116,7 +116,7 @@ void StudentInput(StudentNode* n)
 
 	n->Tail = NewNode;
 
-	printf("ÀÔ·Â¿Ï·á\n");
+	printf("ï¿½Ô·Â¿Ï·ï¿½\n");
 }
 void StudentModify(StudentNode* n)
 {
@@ -126,14 +126,14 @@ void StudentModify(StudentNode* n)
 
 	Modify = n->Head;
 
-	printf("ÀÌ¸§ : ");
-	scanf_s("%s", name, sizeof(name));
+	printf("ï¿½Ì¸ï¿½ : ");
+	scanf("%s", name);
 
 	while (strcmp(Modify->name, name) != 0)
 	{
 		if (Modify->Next == NULL)
 		{
-			printf("Á¸Àç ÇÏÁö ¾Ê´Â Á¤º¸ÀÔ´Ï´Ù!");
+			printf("ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ê´ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ô´Ï´ï¿½!");
 			return;
 		}
 		else
@@ -141,19 +141,19 @@ void StudentModify(StudentNode* n)
 	}
 
 	printf("%s %d %.2lf\n", Modify->name, Modify->id, Modify->score);
-	printf("º¯°æ ÇÏ½Ã°Ú½À´Ï±î? (y/n) : ");
-	choice = _getch();
+	printf("ï¿½ï¿½ï¿½ï¿½ ï¿½Ï½Ã°Ú½ï¿½ï¿½Ï±ï¿½? (y/n) : ");
+	scanf("%c", &choice);
 	printf("\n");
 
 	if (choice == 'y' || choice == 'Y')
 	{
-		printf("ÀÌ¸§ : ");
-		scanf_s("%s", Modify->name, sizeof(Modify->name));
-		printf("ÇÐ¹ø : ");
-		scanf_s("%d", &Modify->id);
-		printf("Á¡¼ö : ");
-		scanf_s("%lf", &Modify->score);
-		printf("º¯°æ ¿Ï·á\n");
+		printf("ï¿½Ì¸ï¿½ : ");
+		scanf("%s", Modify->name);
+		printf("ï¿½Ð¹ï¿½ : ");
+		scanf("%d", &Modify->id);
+		printf("ï¿½ï¿½ï¿½ï¿½ : ");
+		scanf("%lf", &Modify->score);
+		printf("ï¿½ï¿½ï¿½ï¿½ ï¿½Ï·ï¿½\n");
 	}
 	else
 		return;
@@ -166,14 +166,14 @@ void StudentDelete(StudentNode* n)
 
 	Delete = n->Head;
 
-	printf("ÀÌ¸§ : ");
-	scanf_s("%s", name, sizeof(name));
+	printf("ï¿½Ì¸ï¿½ : ");
+	scanf("%s", name);
 
 	while (strcmp(Delete->name, name) != 0)
 	{
 		if (Delete->Next == NULL)
 		{
-			printf("Á¸Àç ÇÏÁö ¾Ê´Â Á¤º¸ÀÔ´Ï´Ù!\n");
+			printf("ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ê´ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ô´Ï´ï¿½!\n");
 			return;
 		}
 		else
@@ -181,8 +181,8 @@ void StudentDelete(StudentNode* n)
 	}
 
 	printf("%s %d %.2lf\n", Delete->name, Delete->id, Delete->score);
-	printf("Á¦°Å ÇÏ½Ã°Ú½À´Ï±î? (y/n) : ");
-	choice = _getch();
+	printf("ï¿½ï¿½ï¿½ï¿½ ï¿½Ï½Ã°Ú½ï¿½ï¿½Ï±ï¿½? (y/n) : ");
+	scanf("%c", &choice);
 	printf("\n");
 
 	if (choice == 'y' || choice == 'Y')
@@ -201,23 +201,23 @@ void StudentDelete(StudentNode* n)
 		}
 
 		StudentFree(Delete);
-		printf("Á¦°Å ¿Ï·á!\n");
+		printf("ï¿½ï¿½ï¿½ï¿½ ï¿½Ï·ï¿½!\n");
 	}
 	else
 		return;
 }
 void StudentPrint(StudentNode* n)
 {
+    char sorting;
+
 	if (n->Head == NULL)
 	{
-		printf("ÀÔ·ÂµÈ µ¥ÀÌÅÍ°¡ ¾ø½À´Ï´Ù!\n");
+		printf("ï¿½Ô·Âµï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Í°ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï´ï¿½!\n");
 		return;
 	}
 
-	char sorting;
-
-	printf("ÀÌ¸§¼øÀ¸·Î Ãâ·ÂÀº 1, ÇÐ¹ø¼øÀ¸·Î Ãâ·ÂÀº 2, ¼ºÀû¼øÀ¸·Î Ãâ·ÂÀº 3À» ÀÔ·ÂÇØÁÖ¼¼¿ä. ");
-	sorting = _getch();
+	printf("ï¿½Ì¸ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ 1, ï¿½Ð¹ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ 2, ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ 3ï¿½ï¿½ ï¿½Ô·ï¿½ï¿½ï¿½ï¿½Ö¼ï¿½ï¿½ï¿½. ");
+	scanf("%c", &sorting);
 	printf("\n");
 
 	if (sorting == '1')
@@ -230,7 +230,7 @@ void StudentPrint(StudentNode* n)
 	Node* cur = (Node *)malloc(sizeof(Node));
 	cur = n->Head;
 
-	printf("ÀÌ¸§		ÇÐ¹ø		¼ºÀû\n");
+	printf("ï¿½Ì¸ï¿½		ï¿½Ð¹ï¿½		ï¿½ï¿½ï¿½ï¿½\n");
 	printf("%s		%d	%.2lf\n", cur->name, cur->id, cur->score);
 	while (cur->Next != NULL)
 	{
@@ -242,11 +242,11 @@ void StudentFilePrint(FILE* file, StudentNode* n)
 {
 	if (n->Head == NULL)
 	{
-		printf("ÀÔ·ÂµÈ µ¥ÀÌÅÍ°¡ ¾ø½À´Ï´Ù!\n");
+		printf("ï¿½Ô·Âµï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Í°ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï´ï¿½!\n");
 		return;
 	}
 	else
-		printf("Áö±Ý±îÁö ±â·ÏÇÑ Á¤º¸¸¦ ÆÄÀÏ¿¡ ±â·ÏÇÕ´Ï´Ù...\n");
+		printf("ï¿½ï¿½ï¿½Ý±ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ï¿ï¿½ ï¿½ï¿½ï¿½ï¿½Õ´Ï´ï¿½...\n");
 
 	Node* cur = (Node *)malloc(sizeof(Node));
 	cur = n->Head;
@@ -315,13 +315,13 @@ void ScoreSort(StudentNode* n)
 		cur2 = n->Head;
 	}
 }
-void Swap(Node* n, Node* m)
+void Swap(Node *n, Node *m)
 {
 	Node* temp = (Node *)malloc(sizeof(Node));
 
-	strcpy_s(temp->name, sizeof(temp->name), n->name);
-	strcpy_s(n->name, sizeof(n->name), m->name);
-	strcpy_s(m->name, sizeof(m->name), temp->name);
+	strcpy(temp->name, n->name);
+	strcpy(n->name, m->name);
+	strcpy(m->name, temp->name);
 
 	temp->id = n->id;
 	n->id = m->id;
@@ -331,7 +331,7 @@ void Swap(Node* n, Node* m)
 	n->score = m->score;
 	m->score = temp->score;
 }
-void StudentFree(Node* n)
+void StudentFree(Node *n)
 {
 	free(n);
 	n = NULL;

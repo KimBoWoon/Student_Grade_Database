@@ -1,0 +1,6 @@
+language: c
+
+compiler: gcc
+
+script: gcc -o test StudentGradeDatabase/Student_Grade_Database/Student_Grade_Database.c
+    StudentGradeDatabase/Student_Grade_Database/Student_Grade_Database.h
