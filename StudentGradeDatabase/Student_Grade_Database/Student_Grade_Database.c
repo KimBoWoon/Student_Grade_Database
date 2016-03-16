@@ -7,18 +7,18 @@ int main()
 void MenuView()
 {
 	printf("********************************\n");
-	printf("�л� ������ ���̽� ���� ���α׷�\n");
-	printf("                 20113259 �躸��\n");
+	printf("학생 데이터 베이스 관리 프로그램\n");
+	printf("                 20113259 김보운\n");
 	printf("********************************\n");
-	printf("----------�޴�----------\n");
-	printf("        1. �Է�\n");
-	printf("        2. ����\n");
-	printf("        3. ����\n");
-	printf("        4. ���\n");
-	printf("        5. ���� ���\n");
-	printf("        6. ���α׷� ����\n");
+	printf("----------메뉴----------\n");
+	printf("        1. 입력\n");
+	printf("        2. 변경\n");
+	printf("        3. 삭제\n");
+	printf("        4. 출력\n");
+	printf("        5. 파일 출력\n");
+	printf("        6. 프로그램 종료\n");
 	printf("------------------------\n");
-	printf("� �۾��� �Ͻðڽ��ϱ�? ");
+	printf("어떤 작업을 하시겠습니까? ");
 }
 void Manager()
 {
@@ -30,11 +30,11 @@ void Manager()
 	n.Tail = NULL;
 	//n.Next = NULL;
 
-	file = fopen("student.db", "a+");
+	fopen_s(&file, "student.db", "a+");
 
 	if (file == NULL)
 	{
-		printf("���� ���� ����\n");
+		printf("파일 개방 실패\n");
 		exit(1);
 	}
 	else
@@ -43,7 +43,7 @@ void Manager()
 	while (1)
 	{
 		MenuView();
-		scanf("%c", &Menu);
+		Menu = _getch();
 		printf("\n");
 
 		switch (Menu)
@@ -64,11 +64,11 @@ void Manager()
 			StudentFilePrint(file, &n);
 			break;
 		case '6':
-			printf("���α׷��� �����մϴ�...\n");
+			printf("프로그램을 종료합니다...\n");
 			fclose(file);
 			exit(0);
 		default:
-			printf("�߸��� �Է��Դϴ�!\n");
+			printf("잘못된 입력입니다!\n");
 			break;
 		}
 		system("pause");
@@ -84,9 +84,9 @@ void FileInput(FILE* file, StudentNode* n)
 		Node* NewNode = (Node *)malloc(sizeof(Node));
 		NewNode->Next = NULL;
 
-		if (fscanf(file, "%s", NewNode->name) == 1)
+		if (fscanf_s(file, "%s", NewNode->name, sizeof(NewNode->name)) == 1)
 		{
-			fscanf(file, "%d %lf", &NewNode->id, &NewNode->score);
+			fscanf_s(file, "%d %lf", &NewNode->id, &NewNode->score);
 
 			if (n->Head == NULL)
 				n->Head = NewNode;
@@ -102,12 +102,12 @@ void StudentInput(StudentNode* n)
 	Node* NewNode = (Node *)malloc(sizeof(Node));
 	NewNode->Next = NULL;
 
-	printf("�̸� : ");
-	scanf("%s", NewNode->name);
-	printf("�й� : ");
-	scanf("%d", &NewNode->id);
-	printf("���� : ");
-	scanf("%lf", &NewNode->score);
+	printf("이름 : ");
+	scanf_s("%s", NewNode->name, sizeof(NewNode->name));
+	printf("학번 : ");
+	scanf_s("%d", &NewNode->id);
+	printf("점수 : ");
+	scanf_s("%lf", &NewNode->score);
 
 	if (n->Head == NULL)
 		n->Head = NewNode;
@@ -116,7 +116,7 @@ void StudentInput(StudentNode* n)
 
 	n->Tail = NewNode;
 
-	printf("�Է¿Ϸ�\n");
+	printf("입력완료\n");
 }
 void StudentModify(StudentNode* n)
 {
@@ -126,14 +126,14 @@ void StudentModify(StudentNode* n)
 
 	Modify = n->Head;
 
-	printf("�̸� : ");
-	scanf("%s", name);
+	printf("이름 : ");
+	scanf_s("%s", name, sizeof(name));
 
 	while (strcmp(Modify->name, name) != 0)
 	{
 		if (Modify->Next == NULL)
 		{
-			printf("���� ���� �ʴ� �����Դϴ�!");
+			printf("존재 하지 않는 정보입니다!");
 			return;
 		}
 		else
@@ -141,19 +141,19 @@ void StudentModify(StudentNode* n)
 	}
 
 	printf("%s %d %.2lf\n", Modify->name, Modify->id, Modify->score);
-	printf("���� �Ͻðڽ��ϱ�? (y/n) : ");
-	scanf("%c", &choice);
+	printf("변경 하시겠습니까? (y/n) : ");
+	choice = _getch();
 	printf("\n");
 
 	if (choice == 'y' || choice == 'Y')
 	{
-		printf("�̸� : ");
-		scanf("%s", Modify->name);
-		printf("�й� : ");
-		scanf("%d", &Modify->id);
-		printf("���� : ");
-		scanf("%lf", &Modify->score);
-		printf("���� �Ϸ�\n");
+		printf("이름 : ");
+		scanf_s("%s", Modify->name, sizeof(Modify->name));
+		printf("학번 : ");
+		scanf_s("%d", &Modify->id);
+		printf("점수 : ");
+		scanf_s("%lf", &Modify->score);
+		printf("변경 완료\n");
 	}
 	else
 		return;
@@ -166,14 +166,14 @@ void StudentDelete(StudentNode* n)
 
 	Delete = n->Head;
 
-	printf("�̸� : ");
-	scanf("%s", name);
+	printf("이름 : ");
+	scanf_s("%s", name, sizeof(name));
 
 	while (strcmp(Delete->name, name) != 0)
 	{
 		if (Delete->Next == NULL)
 		{
-			printf("���� ���� �ʴ� �����Դϴ�!\n");
+			printf("존재 하지 않는 정보입니다!\n");
 			return;
 		}
 		else
@@ -181,8 +181,8 @@ void StudentDelete(StudentNode* n)
 	}
 
 	printf("%s %d %.2lf\n", Delete->name, Delete->id, Delete->score);
-	printf("���� �Ͻðڽ��ϱ�? (y/n) : ");
-	scanf("%c", &choice);
+	printf("제거 하시겠습니까? (y/n) : ");
+	choice = _getch();
 	printf("\n");
 
 	if (choice == 'y' || choice == 'Y')
@@ -201,23 +201,23 @@ void StudentDelete(StudentNode* n)
 		}
 
 		StudentFree(Delete);
-		printf("���� �Ϸ�!\n");
+		printf("제거 완료!\n");
 	}
 	else
 		return;
 }
 void StudentPrint(StudentNode* n)
 {
-    char sorting;
-
 	if (n->Head == NULL)
 	{
-		printf("�Էµ� �����Ͱ� �����ϴ�!\n");
+		printf("입력된 데이터가 없습니다!\n");
 		return;
 	}
 
-	printf("�̸������� ����� 1, �й������� ����� 2, ���������� ����� 3�� �Է����ּ���. ");
-	scanf("%c", &sorting);
+	char sorting;
+
+	printf("이름순으로 출력은 1, 학번순으로 출력은 2, 성적순으로 출력은 3을 입력해주세요. ");
+	sorting = _getch();
 	printf("\n");
 
 	if (sorting == '1')
@@ -230,7 +230,7 @@ void StudentPrint(StudentNode* n)
 	Node* cur = (Node *)malloc(sizeof(Node));
 	cur = n->Head;
 
-	printf("�̸�		�й�		����\n");
+	printf("이름		학번		성적\n");
 	printf("%s		%d	%.2lf\n", cur->name, cur->id, cur->score);
 	while (cur->Next != NULL)
 	{
@@ -242,11 +242,11 @@ void StudentFilePrint(FILE* file, StudentNode* n)
 {
 	if (n->Head == NULL)
 	{
-		printf("�Էµ� �����Ͱ� �����ϴ�!\n");
+		printf("입력된 데이터가 없습니다!\n");
 		return;
 	}
 	else
-		printf("���ݱ��� ����� ������ ���Ͽ� ����մϴ�...\n");
+		printf("지금까지 기록한 정보를 파일에 기록합니다...\n");
 
 	Node* cur = (Node *)malloc(sizeof(Node));
 	cur = n->Head;
@@ -315,13 +315,13 @@ void ScoreSort(StudentNode* n)
 		cur2 = n->Head;
 	}
 }
-void Swap(Node *n, Node *m)
+void Swap(Node* n, Node* m)
 {
 	Node* temp = (Node *)malloc(sizeof(Node));
 
-	strcpy(temp->name, n->name);
-	strcpy(n->name, m->name);
-	strcpy(m->name, temp->name);
+	strcpy_s(temp->name, sizeof(temp->name), n->name);
+	strcpy_s(n->name, sizeof(n->name), m->name);
+	strcpy_s(m->name, sizeof(m->name), temp->name);
 
 	temp->id = n->id;
 	n->id = m->id;
@@ -331,7 +331,7 @@ void Swap(Node *n, Node *m)
 	n->score = m->score;
 	m->score = temp->score;
 }
-void StudentFree(Node *n)
+void StudentFree(Node* n)
 {
 	free(n);
 	n = NULL;
