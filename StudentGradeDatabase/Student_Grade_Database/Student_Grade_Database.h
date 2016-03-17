@@ -5,30 +5,24 @@
 #include <stdlib.h>
 #include <string.h>
 
-typedef struct Node {
-	char name[20];
-	int id;
-	double score;
-	struct Node* Next;
-} Node;
+#include <WinSock2.h>
+#include <mysql.h>
 
-typedef struct StudentNode {
-	struct Node* Head;
-	struct Node* Tail;
-} StudentNode;
+#pragma comment(lib, "libmySQL.lib")
+#pragma comment(lib, "ws2_32.lib")
+
+#define  DB_HOST  "localhost"
+#define  DB_USER  "Practice"
+#define  DB_PASS  "1234"
+#define  DB_PORT  3306
+#define  DB_NAME  "Student"
 
 void MenuView();
-void Manager();
-void FileInput(FILE* file, StudentNode* n);
-void StudentInput(StudentNode* n);
-void StudentModify(StudentNode* n);
-void StudentDelete(StudentNode* n);
-void StudentPrint(StudentNode* n);
-void StudentFilePrint(FILE* file, StudentNode* n);
-void StudentFree(Node* n);
-void NameSort(StudentNode* n);
-void StudentIDSort(StudentNode* n);
-void ScoreSort(StudentNode* n);
-void Swap(Node* n, Node* m);
+void Manager(MYSQL *pConnection, MYSQL conn, MYSQL_RES* pSQL_result, MYSQL_ROW SQL_row);
+void StudentInput(MYSQL *pConnection, MYSQL conn, MYSQL_RES* pSQL_result, MYSQL_ROW SQL_row);
+void StudentModify(MYSQL *pConnection, MYSQL conn, MYSQL_RES* pSQL_result, MYSQL_ROW SQL_row);
+void StudentDelete(MYSQL *pConnection, MYSQL conn, MYSQL_RES* pSQL_result, MYSQL_ROW SQL_row);
+void StudentPrint(MYSQL *pConnection, MYSQL conn, MYSQL_RES* pSQL_result, MYSQL_ROW SQL_row);
+void StudentFilePrint(MYSQL *pConnection, MYSQL conn, MYSQL_RES* pSQL_result, MYSQL_ROW SQL_row);
 
 #endif

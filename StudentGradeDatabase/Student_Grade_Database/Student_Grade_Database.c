@@ -1,44 +1,53 @@
 #include "Student_Grade_Database.h"
 
+#pragma warning(disable:4996)
+
 int main()
 {
-	Manager();
+	MYSQL *pConnection = NULL;
+	MYSQL conn;
+	MYSQL_RES* pSQL_result = NULL;
+	MYSQL_ROW SQL_row = NULL;            // µ¥ÀÌÅÍ ÇÑ ÇàÀÌ ¹è¿­·Î µé¾î°¡´Â °ø°£
+	int nQuery_stat;        // Äõ¸® Åë°è
+
+	mysql_init(&conn);
+
+	pConnection = mysql_real_connect(&conn, DB_HOST, DB_USER, DB_PASS, DB_NAME, DB_PORT, (char*)NULL, 0); // ¼ÒÄÏ°ú Client ÇÃ·¹±×
+
+	if (pConnection == NULL) {
+		printf("DB Connect Failed\n");
+		return 0;
+	}
+
+	// ÇÑ±Û »ç¿ëÀ» À§ÇÑ ¼³Á¤
+	mysql_query(pConnection, "SET SESSION character_set_connection=euckr;");
+	mysql_query(pConnection, "SET SESSION character_set_results=euckr;");
+	mysql_query(pConnection, "SET SESSION character_set_client=euckr;");
+
+	Manager(pConnection, conn, pSQL_result, SQL_row);
+
+	mysql_close(pConnection);
 }
 void MenuView()
 {
 	printf("********************************\n");
-	printf("í•™ìƒ ë°ì´í„° ë² ì´ìŠ¤ ê´€ë¦¬ í”„ë¡œê·¸ëž¨\n");
-	printf("                 20113259 ê¹€ë³´ìš´\n");
+	printf("ÇÐ»ý µ¥ÀÌÅÍ º£ÀÌ½º °ü¸® ÇÁ·Î±×·¥\n");
+	printf("                 20113259 ±èº¸¿î\n");
 	printf("********************************\n");
-	printf("----------ë©”ë‰´----------\n");
-	printf("        1. ìž…ë ¥\n");
-	printf("        2. ë³€ê²½\n");
-	printf("        3. ì‚­ì œ\n");
-	printf("        4. ì¶œë ¥\n");
-	printf("        5. íŒŒì¼ ì¶œë ¥\n");
-	printf("        6. í”„ë¡œê·¸ëž¨ ì¢…ë£Œ\n");
+	printf("----------¸Þ´º----------\n");
+	printf("        1. ÀÔ·Â\n");
+	printf("        2. º¯°æ\n");
+	printf("        3. »èÁ¦\n");
+	printf("        4. Ãâ·Â\n");
+	printf("        5. ÆÄÀÏ Ãâ·Â\n");
+	printf("        6. ÇÁ·Î±×·¥ Á¾·á\n");
 	printf("------------------------\n");
-	printf("ì–´ë–¤ ìž‘ì—…ì„ í•˜ì‹œê² ìŠµë‹ˆê¹Œ? ");
+	printf("¾î¶² ÀÛ¾÷À» ÇÏ½Ã°Ú½À´Ï±î? ");
 }
-void Manager()
+void Manager(MYSQL *pConnection, MYSQL conn, MYSQL_RES* pSQL_result, MYSQL_ROW SQL_row)
 {
 	FILE *file;
-	StudentNode n;
 	char Menu;
-
-	n.Head = NULL;
-	n.Tail = NULL;
-	//n.Next = NULL;
-
-	fopen_s(&file, "student.db", "a+");
-
-	if (file == NULL)
-	{
-		printf("íŒŒì¼ ê°œë°© ì‹¤íŒ¨\n");
-		exit(1);
-	}
-	else
-		FileInput(file, &n);
 
 	while (1)
 	{
@@ -49,290 +58,132 @@ void Manager()
 		switch (Menu)
 		{
 		case '1':
-			StudentInput(&n);
+			StudentInput(pConnection, conn, pSQL_result, SQL_row);
 			break;
 		case '2':
-			StudentModify(&n);
+			StudentModify(pConnection, conn, pSQL_result, SQL_row);
 			break;
 		case '3':
-			StudentDelete(&n);
+			StudentDelete(pConnection, conn, pSQL_result, SQL_row);
 			break;
 		case '4':
-			StudentPrint(&n);
+			StudentPrint(pConnection, conn, pSQL_result, SQL_row);
 			break;
 		case '5':
-			StudentFilePrint(file, &n);
+			StudentFilePrint(pConnection, conn, pSQL_result, SQL_row);
 			break;
 		case '6':
-			printf("í”„ë¡œê·¸ëž¨ì„ ì¢…ë£Œí•©ë‹ˆë‹¤...\n");
-			fclose(file);
+			printf("ÇÁ·Î±×·¥À» Á¾·áÇÕ´Ï´Ù...\n");
 			exit(0);
 		default:
-			printf("ìž˜ëª»ëœ ìž…ë ¥ìž…ë‹ˆë‹¤!\n");
+			printf("Àß¸øµÈ ÀÔ·ÂÀÔ´Ï´Ù!\n");
 			break;
 		}
 		system("pause");
 		system("cls");
 	}
 }
-void FileInput(FILE* file, StudentNode* n)
+void StudentInput(MYSQL *pConnection, MYSQL conn, MYSQL_RES* pSQL_result, MYSQL_ROW SQL_row)
 {
-	int i;
+	int nQuery_stat;
+	int id = -1;
+	char name[20] = "";
 
-	for (i = 0; !feof(file); i++)
-	{
-		Node* NewNode = (Node *)malloc(sizeof(Node));
-		NewNode->Next = NULL;
+	printf("ÇÐ¹ø : ");
+	scanf("%d", &id);
+	printf("ÀÌ¸§ : ");
+	scanf("%s", &name);
 
-		if (fscanf_s(file, "%s", NewNode->name, sizeof(NewNode->name)) == 1)
-		{
-			fscanf_s(file, "%d %lf", &NewNode->id, &NewNode->score);
+	char query[255];
+	sprintf(query, "INSERT INTO STUDENT(ID, NAME) VALUES(%d, '%s');", id, name);
 
-			if (n->Head == NULL)
-				n->Head = NewNode;
-			else
-				n->Tail->Next = NewNode;
-
-			n->Tail = NewNode;
-		}
-	}
+	nQuery_stat = mysql_query(pConnection, query);
+	if (nQuery_stat != 0)
+		printf("Data Insert Failed\n");
 }
-void StudentInput(StudentNode* n)
+void StudentModify(MYSQL *pConnection, MYSQL conn, MYSQL_RES* pSQL_result, MYSQL_ROW SQL_row)
 {
-	Node* NewNode = (Node *)malloc(sizeof(Node));
-	NewNode->Next = NULL;
+	int nQuery_stat;
+	int id = -1, choice = 0;
+	char name[20] = "", query[255]="";
 
-	printf("ì´ë¦„ : ");
-	scanf_s("%s", NewNode->name, sizeof(NewNode->name));
-	printf("í•™ë²ˆ : ");
-	scanf_s("%d", &NewNode->id);
-	printf("ì ìˆ˜ : ");
-	scanf_s("%lf", &NewNode->score);
+	printf("ÇÐ¹ø : ");
+	scanf("%d", &id);
 
-	if (n->Head == NULL)
-		n->Head = NewNode;
-	else
-		n->Tail->Next = NewNode;
+	printf("ÇÐ¹ø º¯°æ : 1, ÀÌ¸§ º¯°æ : 2\n");
+	scanf("%d", &choice);
+	if (choice == 1) {
+		int setID = 0;
+		printf("º¯°æÇÒ ÇÐ¹øÀ» ÀÔ·ÂÇÏ¼¼¿ä : ");
+		scanf("%d", &setID);
+		sprintf(query, "UPDATE STUDENT SET ID=%d WHERE ID=%d;", setID, id);
+	}
+	else if (choice == 2) {
+		char setName[20] = "";
+		printf("º¯°æÇÒ ÀÌ¸§À» ÀÔ·ÂÇÏ¼¼¿ä : ");
+		scanf("%s", &setName);
+		sprintf(query, "UPDATE STUDENT SET NAME='%s' WHERE ID=%d;", setName, id);
+	}
 
-	n->Tail = NewNode;
-
-	printf("ìž…ë ¥ì™„ë£Œ\n");
+	nQuery_stat = mysql_query(pConnection, query);
+	if (nQuery_stat != 0)
+		printf("Data Modify Failed\n");
 }
-void StudentModify(StudentNode* n)
+void StudentDelete(MYSQL *pConnection, MYSQL conn, MYSQL_RES* pSQL_result, MYSQL_ROW SQL_row)
 {
-	Node* Modify = (Node *)malloc(sizeof(Node));
-	char name[20];
-	char choice;
+	int nQuery_stat;
+	int id = -1;
+	char name[20] = "";
 
-	Modify = n->Head;
+	printf("ÇÐ¹ø : ");
+	scanf("%d", &id);
 
-	printf("ì´ë¦„ : ");
-	scanf_s("%s", name, sizeof(name));
+	char query[255];
+	sprintf(query, "DELETE FROM STUDENT WHERE ID=%d;", id);
 
-	while (strcmp(Modify->name, name) != 0)
-	{
-		if (Modify->Next == NULL)
-		{
-			printf("ì¡´ìž¬ í•˜ì§€ ì•ŠëŠ” ì •ë³´ìž…ë‹ˆë‹¤!");
-			return;
-		}
-		else
-			Modify = Modify->Next;
-	}
-
-	printf("%s %d %.2lf\n", Modify->name, Modify->id, Modify->score);
-	printf("ë³€ê²½ í•˜ì‹œê² ìŠµë‹ˆê¹Œ? (y/n) : ");
-	choice = _getch();
-	printf("\n");
-
-	if (choice == 'y' || choice == 'Y')
-	{
-		printf("ì´ë¦„ : ");
-		scanf_s("%s", Modify->name, sizeof(Modify->name));
-		printf("í•™ë²ˆ : ");
-		scanf_s("%d", &Modify->id);
-		printf("ì ìˆ˜ : ");
-		scanf_s("%lf", &Modify->score);
-		printf("ë³€ê²½ ì™„ë£Œ\n");
-	}
-	else
-		return;
+	nQuery_stat = mysql_query(pConnection, query);
+	if (nQuery_stat != 0)
+		printf("Data Delete Failed\n");
 }
-void StudentDelete(StudentNode* n)
+void StudentPrint(MYSQL *pConnection, MYSQL conn, MYSQL_RES* pSQL_result, MYSQL_ROW SQL_row)
 {
-	Node* Delete = (Node *)malloc(sizeof(Node));
-	char name[20];
-	char choice;
-
-	Delete = n->Head;
-
-	printf("ì´ë¦„ : ");
-	scanf_s("%s", name, sizeof(name));
-
-	while (strcmp(Delete->name, name) != 0)
-	{
-		if (Delete->Next == NULL)
-		{
-			printf("ì¡´ìž¬ í•˜ì§€ ì•ŠëŠ” ì •ë³´ìž…ë‹ˆë‹¤!\n");
-			return;
-		}
-		else
-			Delete = Delete->Next;
-	}
-
-	printf("%s %d %.2lf\n", Delete->name, Delete->id, Delete->score);
-	printf("ì œê±° í•˜ì‹œê² ìŠµë‹ˆê¹Œ? (y/n) : ");
-	choice = _getch();
-	printf("\n");
-
-	if (choice == 'y' || choice == 'Y')
-	{
-		if (Delete == n->Head)
-			n->Head = n->Head->Next;
-		else
-		{
-			Node* Before = (Node *)malloc(sizeof(Node));
-			Before = n->Head;
-
-			while (strcmp(Before->Next->name, name) != 0)
-				Before = Before->Next;
-
-			Before->Next = Delete->Next;
-		}
-
-		StudentFree(Delete);
-		printf("ì œê±° ì™„ë£Œ!\n");
-	}
-	else
-		return;
-}
-void StudentPrint(StudentNode* n)
-{
-	if (n->Head == NULL)
-	{
-		printf("ìž…ë ¥ëœ ë°ì´í„°ê°€ ì—†ìŠµë‹ˆë‹¤!\n");
-		return;
-	}
-
 	char sorting;
+	char* query = NULL;
+	int nQuery_stat;
 
-	printf("ì´ë¦„ìˆœìœ¼ë¡œ ì¶œë ¥ì€ 1, í•™ë²ˆìˆœìœ¼ë¡œ ì¶œë ¥ì€ 2, ì„±ì ìˆœìœ¼ë¡œ ì¶œë ¥ì€ 3ì„ ìž…ë ¥í•´ì£¼ì„¸ìš”. ");
+	printf("ÇÐ¹ø¼øÀ¸·Î Ãâ·ÂÀº 1, µî¼ö¼øÀ¸·Î Ãâ·ÂÀº 2, ¼ºÀû¼øÀ¸·Î Ãâ·ÂÀº 3À» ÀÔ·ÂÇØÁÖ¼¼¿ä. ");
 	sorting = _getch();
 	printf("\n");
 
 	if (sorting == '1')
-		NameSort(n);
+		query = "SELECT * FROM STUDENT.ENROL ORDER BY ID;";
 	else if (sorting == '2')
-		StudentIDSort(n);
+		query = "SELECT * FROM STUDENT.ENROL ORDER BY RANK;";
 	else if (sorting == '3')
-		ScoreSort(n);
+		query = "SELECT * FROM STUDENT.ENROL ORDER BY GRADE;";
 
-	Node* cur = (Node *)malloc(sizeof(Node));
-	cur = n->Head;
+	nQuery_stat = mysql_query(pConnection, query);
+	if (nQuery_stat != 0)
+		printf("Data Search Error\n");
 
-	printf("ì´ë¦„		í•™ë²ˆ		ì„±ì \n");
-	printf("%s		%d	%.2lf\n", cur->name, cur->id, cur->score);
-	while (cur->Next != NULL)
-	{
-		printf("%s		%d	%.2lf\n", cur->Next->name, cur->Next->id, cur->Next->score);
-		cur = cur->Next;
-	}
+	pSQL_result = mysql_store_result(pConnection);
+	printf("  ÇÐ¹ø    °ú¸ñ¹øÈ£       Áß°£   ±â¸»    °úÁ¦    Ãâ¼®     ÇÕ°è  µî¼ö   ¼ºÀû\n");
+	while ((SQL_row = mysql_fetch_row(pSQL_result)) != NULL)
+		printf("%s %s \t%s \t%s \t%s \t%s \t%s \t%s \t%s\n", SQL_row[0], SQL_row[1], SQL_row[2], SQL_row[3], SQL_row[4], SQL_row[5], SQL_row[6], SQL_row[7], SQL_row[8]);
+	mysql_free_result(pSQL_result);
 }
-void StudentFilePrint(FILE* file, StudentNode* n)
+void StudentFilePrint(MYSQL *pConnection, MYSQL conn, MYSQL_RES* pSQL_result, MYSQL_ROW SQL_row)
 {
-	if (n->Head == NULL)
-	{
-		printf("ìž…ë ¥ëœ ë°ì´í„°ê°€ ì—†ìŠµë‹ˆë‹¤!\n");
-		return;
-	}
-	else
-		printf("ì§€ê¸ˆê¹Œì§€ ê¸°ë¡í•œ ì •ë³´ë¥¼ íŒŒì¼ì— ê¸°ë¡í•©ë‹ˆë‹¤...\n");
+	FILE* file = fopen("student.txt", "w");
+	int nQuery_stat;
+	char* query = "SELECT * FROM STUDENT.ENROL ORDER BY RANK;";
 
-	Node* cur = (Node *)malloc(sizeof(Node));
-	cur = n->Head;
+	nQuery_stat = mysql_query(pConnection, query);
+	if (nQuery_stat != 0)
+		printf("Data Search Error\n");
 
-	fprintf(file, "%s %d %.2lf\n", cur->name, cur->id, cur->score);
-	while (cur->Next != NULL)
-	{
-		fprintf(file, "%s %d %.2lf\n", cur->Next->name, cur->Next->id, cur->Next->score);
-		cur = cur->Next;
-	}
-}
-void NameSort(StudentNode* n)
-{
-	Node* cur = (Node *)malloc(sizeof(Node));
-	Node* cur2 = (Node *)malloc(sizeof(Node));
-	cur = n->Head;
-	cur2 = n->Head;
-
-	while (cur->Next != NULL)
-	{
-		while (cur2->Next != NULL)
-		{
-			if (strcmp(cur2->name, cur2->Next->name) > 0)
-				Swap(cur2, cur2->Next);
-			cur2 = cur2->Next;
-		}
-		cur = cur->Next;
-		cur2 = n->Head;
-	}
-}
-void StudentIDSort(StudentNode* n)
-{
-	Node* cur = (Node *)malloc(sizeof(Node));
-	Node* cur2 = (Node *)malloc(sizeof(Node));
-	cur = n->Head;
-	cur2 = n->Head;
-
-	while (cur->Next != NULL)
-	{
-		while (cur2->Next != NULL)
-		{
-			if (cur2->id > cur2->Next->id)
-				Swap(cur2, cur2->Next);
-			cur2 = cur2->Next;
-		}
-		cur = cur->Next;
-		cur2 = n->Head;
-	}
-}
-void ScoreSort(StudentNode* n)
-{
-	Node* cur = (Node *)malloc(sizeof(Node));
-	Node* cur2 = (Node *)malloc(sizeof(Node));
-	cur = n->Head;
-	cur2 = n->Head;
-
-	while (cur->Next != NULL)
-	{
-		while (cur2->Next != NULL)
-		{
-			if (cur2->score > cur2->Next->score)
-				Swap(cur2, cur2->Next);
-			cur2 = cur2->Next;
-		}
-		cur = cur->Next;
-		cur2 = n->Head;
-	}
-}
-void Swap(Node* n, Node* m)
-{
-	Node* temp = (Node *)malloc(sizeof(Node));
-
-	strcpy_s(temp->name, sizeof(temp->name), n->name);
-	strcpy_s(n->name, sizeof(n->name), m->name);
-	strcpy_s(m->name, sizeof(m->name), temp->name);
-
-	temp->id = n->id;
-	n->id = m->id;
-	m->id = temp->id;
-
-	temp->score = n->score;
-	n->score = m->score;
-	m->score = temp->score;
-}
-void StudentFree(Node* n)
-{
-	free(n);
-	n = NULL;
+	pSQL_result = mysql_store_result(pConnection);
+	while ((SQL_row = mysql_fetch_row(pSQL_result)) != NULL)
+		fprintf(file, "%s %s \t%s \t%s \t%s \t%s \t%s \t%s \t%s\n", SQL_row[0], SQL_row[1], SQL_row[2], SQL_row[3], SQL_row[4], SQL_row[5], SQL_row[6], SQL_row[7], SQL_row[8]);
+	mysql_free_result(pSQL_result);
 }

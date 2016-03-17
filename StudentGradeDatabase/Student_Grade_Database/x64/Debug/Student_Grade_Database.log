@@ -1,0 +1,5 @@
+﻿  Student_Grade_Database.c
+Student_Grade_Database.c(11): warning C4101: 'nQuery_stat' :참조되지 않은 지역 변수입니다.
+Student_Grade_Database.c(55): warning C4013: '_getch'이(가) 정의되지 않았습니다. extern은 int형을 반환하는 것으로 간주합니다.
+Student_Grade_Database.c(49): warning C4101: 'file' :참조되지 않은 지역 변수입니다.
+  Student_Grade_Database.vcxproj -> D:\GitHub\Student_Grade_Database\StudentGradeDatabase\x64\Debug\Student_Grade_Database.exe
